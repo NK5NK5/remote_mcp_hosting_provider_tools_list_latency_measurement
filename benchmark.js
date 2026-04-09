@@ -41,9 +41,14 @@ if (jitter_max_s > 0) {
   await new Promise(resolve => setTimeout(resolve, jitter_ms));
 }
 
-// --- Config ---
-const endpoints_path = join(import.meta.dirname, "endpoints.json");
-const raw = JSON.parse(readFileSync(endpoints_path, "utf-8"));
+// --- Endpoints (source de vérité : repo remote_mcp_server_per_hosting_provider) ---
+const ENDPOINTS_URL = "https://raw.githubusercontent.com/NK5NK5/remote_mcp_server_per_hosting_provider/main/endpoints.json";
+const endpoints_res = await fetch(ENDPOINTS_URL, { signal: AbortSignal.timeout(10000) });
+if (!endpoints_res.ok) {
+  console.error(`Impossible de récupérer endpoints.json depuis GitHub (${endpoints_res.status})`);
+  process.exit(1);
+}
+const raw = await endpoints_res.json();
 
 const servers = Object.entries(raw)
   .filter(([key]) => !key.startsWith("_"))
