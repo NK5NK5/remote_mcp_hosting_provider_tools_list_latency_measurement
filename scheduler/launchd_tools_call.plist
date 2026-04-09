@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- launchd_tools_call.plist — Mac uniquement
+     Lance tools_call_benchmark.js toutes les 2h, décalé de 50min par rapport à tools/list.
+     Séparation effective avec tools/list : ~40 à 80min après jitter.
+
+     Installation :
+       cp scheduler/launchd_tools_call.plist ~/Library/LaunchAgents/
+       launchctl load ~/Library/LaunchAgents/launchd_tools_call.plist
+
+     Désinstallation :
+       launchctl unload ~/Library/LaunchAgents/launchd_tools_call.plist
+       rm ~/Library/LaunchAgents/launchd_tools_call.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.mcp-benchmark.tools-call</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/node</string>
+    <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/tools_call_benchmark.js</string>
+    <string>--jitter</string>
+    <string>300</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement</string>
+
+  <!-- 50min après les heures paires UTC (décalé par rapport à tools/list) -->
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Hour</key><integer>0</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>2</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>4</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>6</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>8</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>10</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>12</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>14</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>16</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>18</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>20</integer><key>Minute</key><integer>50</integer></dict>
+    <dict><key>Hour</key><integer>22</integer><key>Minute</key><integer>50</integer></dict>
+  </array>
+
+  <key>StandardOutPath</key>
+  <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/logs/tools_call.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/logs/tools_call.log</string>
+
+  <key>KeepAlive</key>
+  <false/>
+</dict>
+</plist>

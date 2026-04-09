@@ -1,0 +1,17 @@
+# MCP latency benchmark — crontab template
+#
+# Avant d'installer : remplacer BENCH_DIR par le chemin absolu du répertoire
+# Exemple : BENCH_DIR=/opt/mcp-benchmark
+#
+# Installation : bash scheduler/install.sh
+# Vérification : crontab -l
+
+BENCH_DIR=/REMPLACER/PAR/LE/CHEMIN/ABSOLU
+
+# tools/list — toutes les 2h pile (heure UTC)
+# Jitter intégré (--jitter 300 = jusqu'à 5min de délai aléatoire)
+0 */2 * * * cd $BENCH_DIR && node benchmark.js --jitter 300 >> $BENCH_DIR/logs/tools_list.log 2>&1
+
+# tools/call → get_mcp_client_ip — toutes les 2h, décalé de 50min
+# Séparation effective avec tools/list : ~40 à 80min après jitter
+50 0,2,4,6,8,10,12,14,16,18,20,22 * * * cd $BENCH_DIR && node tools_call_benchmark.js --jitter 300 >> $BENCH_DIR/logs/tools_call.log 2>&1

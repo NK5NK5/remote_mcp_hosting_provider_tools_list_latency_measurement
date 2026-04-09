@@ -1,0 +1,173 @@
+{
+  "benchmark": "tools/list",
+  "date": "2026-04-08T22:01:31.342Z",
+  "timeout_ms": 15000,
+  "mcpclient_context": {
+    "hostname": "nlaptop.home",
+    "platform": "darwin",
+    "public_ip": null,
+    "geo": null
+  },
+  "results": [
+    {
+      "group": "servers_temoins",
+      "name": "cloudflare_workers",
+      "url": "https://remote-mcp-server-cloudflare-workers.reboot.workers.dev/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 145.762994,
+          "request_end_ms": 372.185977
+        },
+        "mcpserver": {
+          "start_ms": 1775685673986,
+          "end_ms": 1775685673986
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "vercel",
+      "url": "https://vercel-delta-virid-14.vercel.app/api/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 372.59107,
+          "request_end_ms": 1663.608689
+        },
+        "mcpserver": {
+          "start_ms": 1775685675237,
+          "end_ms": 1775685675241
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "netlify",
+      "url": "https://mcp-benchmark-netlify.netlify.app/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 1663.818981,
+          "request_end_ms": 3001.499695
+        },
+        "mcpserver": {
+          "start_ms": 118,
+          "end_ms": 118
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "railway",
+      "url": "https://mcp-benchmark-railway-production.up.railway.app/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 3001.724852,
+          "request_end_ms": 3615.549913
+        },
+        "mcpserver": {
+          "start_ms": 4133123,
+          "end_ms": 4133123
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "supabase_edge_functions",
+      "url": "https://etidrwgmegfsusnrrpyc.supabase.co/functions/v1/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 3615.784718,
+          "request_end_ms": 3831.92931
+        },
+        "mcpserver": {
+          "start_ms": 22,
+          "end_ms": 23
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "fermyon",
+      "url": "https://remote-mcp-server-fermyon-enkfidvd.fermyon.app/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 3832.11929,
+          "request_end_ms": 4234.291611
+        },
+        "mcpserver": {
+          "start_ms": 1,
+          "end_ms": 1
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "valtown",
+      "url": "https://NK5--1562c5ce32c411f1b64f42dde27851f2.web.val.run",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 4234.445553,
+          "request_end_ms": 4846.433087
+        },
+        "mcpserver": {
+          "start_ms": 18,
+          "end_ms": 18
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "render",
+      "url": "https://mcp-hosting-benchmark.onrender.com/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 4846.604476,
+          "request_end_ms": 17748.386967
+        },
+        "mcpserver": {
+          "start_ms": 5955,
+          "end_ms": 5958
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "server_label": "paris-macbook",
+  "jitter_max_seconds": 300,
+  "timeout_ms": 15000
+}

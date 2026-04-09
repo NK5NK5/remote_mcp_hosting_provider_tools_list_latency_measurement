@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "created": "2026-04-09",
+  "artifact_type": "directory",
+  "chosen_name": "remote_mcp_hosting_provider_tools_list_latency_measurement",
+  "user_intent": "Mesurer la latence du tools/list pour différents hébergeurs de remote MCP servers, afin de comparer objectivement leur performance cold start sans se fier aux recommandations marketing des documentations officielles.",
+  "friction": "Les documentations officielles (Anthropic, OpenAI) recommandent quelques hébergeurs (Cloudflare, Vercel, etc.) avec des arguments marketing, sans données chiffrées objectives. Aucune source indépendante ne fournit de mesures réelles de latence.",
+  "when_to_use": "Quand on veut collecter des mesures de latence tools/list sur des remote MCP servers hébergés chez différents providers. Quand on veut enrichir le jeu de données de résultats JSON pour alimenter l'analyse.",
+  "when_not_to_use": "Pour analyser ou visualiser les résultats — utiliser remote_mcp_hosting_provider_tools_list_latency_analysis. Pour des benchmarks applicatifs (tools/call) — ce répertoire se limite au tools/list.",
+  "input": "Liste d'endpoints de remote MCP servers (endpoints.json) et configuration de timeout.",
+  "output": "Fichiers JSON dans results/tools_list_TIMESTAMP.json contenant les latences mcpclient et mcpserver, la géolocalisation du client et des serveurs, et le statut de chaque appel.",
+  "domain": "remote_mcp_hosting, latency_measurement, cold_start"
+}

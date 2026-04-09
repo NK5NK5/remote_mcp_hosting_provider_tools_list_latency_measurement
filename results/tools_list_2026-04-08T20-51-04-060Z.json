@@ -1,0 +1,172 @@
+{
+  "benchmark": "tools/list",
+  "date": "2026-04-08T20:51:04.061Z",
+  "timeout_ms": 15000,
+  "results": [
+    {
+      "group": "servers_temoins",
+      "name": "cloudflare_workers",
+      "url": "https://remote-mcp-server-cloudflare-workers.reboot.workers.dev/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 37.66257,
+          "request_end_ms": 235.293855
+        },
+        "mcpserver": {
+          "start_ms": 1775681461028,
+          "end_ms": 1775681461028
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "vercel",
+      "url": "https://vercel-delta-virid-14.vercel.app/api/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 235.650704,
+          "request_end_ms": 349.654412
+        },
+        "mcpserver": {
+          "start_ms": 1775681461156,
+          "end_ms": 1775681461156
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "netlify",
+      "url": "https://mcp-benchmark-netlify.netlify.app/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 349.903222,
+          "request_end_ms": 1156.485918
+        },
+        "mcpserver": {
+          "start_ms": 46938,
+          "end_ms": 46938
+        }
+      },
+      "tools": [
+        "get_mcp_client_ip"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "railway",
+      "url": "https://mcp-benchmark-railway-production.up.railway.app/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 1156.763355,
+          "request_end_ms": 1538.75986
+        },
+        "mcpserver": {
+          "start_ms": null,
+          "end_ms": null
+        }
+      },
+      "tools": [
+        "send_message",
+        "get_messages"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "supabase_edge_functions",
+      "url": "https://etidrwgmegfsusnrrpyc.supabase.co/functions/v1/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 1538.998007,
+          "request_end_ms": 1722.905599
+        },
+        "mcpserver": {
+          "start_ms": null,
+          "end_ms": null
+        }
+      },
+      "tools": [
+        "send_message",
+        "get_messages"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "fermyon",
+      "url": "https://mcp-benchmark-fermyon-nrnkqo7w.fermyon.app/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 1723.096609,
+          "request_end_ms": 2027.420037
+        },
+        "mcpserver": {
+          "start_ms": null,
+          "end_ms": null
+        }
+      },
+      "tools": [
+        "send_message",
+        "get_messages"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "valtown",
+      "url": "https://NK5--1562c5ce32c411f1b64f42dde27851f2.web.val.run",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 2027.642726,
+          "request_end_ms": 2692.685191
+        },
+        "mcpserver": {
+          "start_ms": null,
+          "end_ms": null
+        }
+      },
+      "tools": [
+        "send_message",
+        "get_messages"
+      ]
+    },
+    {
+      "group": "servers_temoins",
+      "name": "render",
+      "url": "https://mcp-hosting-benchmark.onrender.com/mcp",
+      "ok": true,
+      "http_status": 200,
+      "timestamps": {
+        "mcpclient": {
+          "request_start_ms": 2692.849675,
+          "request_end_ms": 3305.828848
+        },
+        "mcpserver": {
+          "start_ms": null,
+          "end_ms": null
+        }
+      },
+      "tools": [
+        "send_message",
+        "get_messages"
+      ]
+    }
+  ]
+}
