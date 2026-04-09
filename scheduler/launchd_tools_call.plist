@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!-- launchd_tools_call.plist — Mac uniquement
-     Lance tools_call_benchmark.js toutes les 2h, décalé de 50min par rapport à tools/list.
+     Lance tools_call_measurement.js toutes les 2h, décalé de 50min par rapport à tools/list.
      Séparation effective avec tools/list : ~40 à 80min après jitter.
 
      Installation :
@@ -20,7 +20,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>/Users/nico/.nvm/versions/node/v24.14.0/bin/node</string>
-    <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/tools_call_benchmark.js</string>
+    <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/tools_call_measurement.js</string>
     <string>--jitter</string>
     <string>300</string>
   </array>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!-- launchd_tools_list.plist — Mac uniquement
-     Lance benchmark.js toutes les 2h (heures paires UTC).
+     Lance tools_list_measurement.js toutes les 2h (heures paires UTC).
 
      Installation :
        cp scheduler/launchd_tools_list.plist ~/Library/LaunchAgents/
@@ -19,7 +19,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>/Users/nico/.nvm/versions/node/v24.14.0/bin/node</string>
-    <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/benchmark.js</string>
+    <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/tools_list_measurement.js</string>
     <string>--jitter</string>
     <string>300</string>
   </array>
