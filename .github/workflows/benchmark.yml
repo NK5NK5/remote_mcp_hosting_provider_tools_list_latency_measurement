@@ -8,8 +8,6 @@ on:
 jobs:
   benchmark:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout
@@ -23,10 +21,9 @@ jobs:
       - name: Run benchmark
         run: node benchmark.js
 
-      - name: Commit results
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add results/
-          git diff --cached --quiet || git commit -m "results: github_actions_us_east $(date -u +%Y-%m-%dT%H-%M-%SZ)"
-          git push
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-${{ github.run_id }}
+          path: results/
+          retention-days: 90
