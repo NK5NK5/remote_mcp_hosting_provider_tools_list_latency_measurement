@@ -1,0 +1,30 @@
+name: tools_list_benchmark
+
+on:
+  schedule:
+    - cron: "0 */2 * * *"   # toutes les 2h
+  workflow_dispatch:          # déclenchement manuel
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run benchmark
+        run: node benchmark.js
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/
+          git diff --cached --quiet || git commit -m "results: github_actions_us_east $(date -u +%Y-%m-%dT%H-%M-%SZ)"
+          git push
