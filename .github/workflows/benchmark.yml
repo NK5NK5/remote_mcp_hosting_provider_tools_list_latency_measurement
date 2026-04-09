@@ -21,7 +21,7 @@ jobs:
           node-version: "22"
 
       - name: Run benchmark
-        run: node benchmark.js
+        run: node benchmark.js --label github_actions_us_east
 
       - name: Commit results
         run: |
