@@ -293,7 +293,7 @@ if (ok_results.length > 0) {
 const results_dir = join(import.meta.dirname, "results");
 if (!existsSync(results_dir)) mkdirSync(results_dir);
 
-const filename = `tools_list_${server_label}_${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
+const filename = `tools_list_${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
 const filepath = join(results_dir, filename);
 
 writeFileSync(filepath, JSON.stringify({
