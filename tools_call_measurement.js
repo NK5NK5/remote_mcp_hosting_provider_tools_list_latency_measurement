@@ -54,10 +54,8 @@ const raw = await endpoints_res.json();
 
 const servers = Object.entries(raw)
   .filter(([key]) => !key.startsWith("_"))
-  .filter(([group]) => group_filter === null || group === group_filter)
-  .flatMap(([group, entries]) =>
-    Object.entries(entries).map(([name, url]) => ({ group, name, url }))
-  );
+  .filter(([name]) => group_filter === null || name === group_filter)
+  .map(([name, url]) => ({ name, url }));
 
 if (servers.length === 0) {
   console.error("Aucun serveur trouvé dans endpoints.json.");
@@ -228,15 +226,14 @@ console.log(`Servers : ${servers.length}\n`);
 
 const results = [];
 
-for (const { group, name, url } of servers) {
-  process.stdout.write(`  [${group}/${name}] ...`);
+for (const { name, url } of servers) {
+  process.stdout.write(`  [${name}] ...`);
 
   const mcpserver_network = await resolve_mcpserver(url);
   const result = await measure_tools_call(url);
   observed_call_chain_script.fetch_count++;
 
   results.push({
-    group,
     name,
     url,
     observed_call_chain: [
@@ -254,11 +251,11 @@ for (const { group, name, url } of servers) {
   const roundtrip_ms = Math.round(result.timestamps.mcpclient.request_end_ms - result.timestamps.mcpclient.request_start_ms);
   if (result.ok) {
     process.stdout.write(
-      `\r  [${group}/${name}] ${roundtrip_ms}ms  ip_client=${result.tool_result}\n`
+      `\r  [${name}] ${roundtrip_ms}ms  ip_client=${result.tool_result}\n`
     );
   } else {
     process.stdout.write(
-      `\r  [${group}/${name}] ERREUR — ${result.error ?? `http ${result.http_status}`}\n`
+      `\r  [${name}] ERREUR — ${result.error ?? `http ${result.http_status}`}\n`
     );
   }
 }
