@@ -161,7 +161,16 @@ function checkAvailability(pingers) {
       // verifiable — has a public data_url exposing its results
       let recentRunId = null;
       try {
-        const runs = ghApi(`/repos/${REPO}/actions/runs?status=success&per_page=10`);
+        let workflowId = null;
+        try {
+          const workflows = ghApi(`/repos/${REPO}/actions/workflows`);
+          const benchmark = workflows.workflows?.find((w) => w.path.includes("benchmark.yml"));
+          workflowId = benchmark?.id ?? null;
+        } catch {}
+        const runsUrl = workflowId
+          ? `/repos/${REPO}/actions/runs?status=success&workflow_id=${workflowId}&per_page=10`
+          : `/repos/${REPO}/actions/runs?status=success&per_page=10`;
+        const runs = ghApi(runsUrl);
         const now = Date.now();
         const recent = (runs.workflow_runs || []).find(
           (r) => now - new Date(r.created_at).getTime() < maxAgeMs
@@ -178,7 +187,7 @@ function checkAvailability(pingers) {
 
       if (!recentRunId) {
         results.push(fail(`recent_artifact_exists_${pinger.label}`, "skipped — no recent successful run"));
-        pingerResults.push({ label: pinger.label, tested: false });
+        pingerResults.push({ label: pinger.label, tested: false, reason: "no recent successful run found" });
         continue;
       }
 
@@ -186,7 +195,7 @@ function checkAvailability(pingers) {
         const artifacts = ghApi(`/repos/${REPO}/actions/runs/${recentRunId}/artifacts`);
         if (artifacts.total_count === 0) {
           results.push(fail(`recent_artifact_exists_${pinger.label}`, "no artifacts found for the latest successful run"));
-          pingerResults.push({ label: pinger.label, tested: false });
+          pingerResults.push({ label: pinger.label, tested: false, reason: "no artifacts found for the latest successful run" });
           continue;
         }
         results.push(pass(`recent_artifact_exists_${pinger.label}`));
@@ -210,7 +219,7 @@ function checkAvailability(pingers) {
         });
       } catch (e) {
         results.push(fail(`recent_artifact_exists_${pinger.label}`, `artifact download failed — ${e.message}`));
-        pingerResults.push({ label: pinger.label, tested: false });
+        pingerResults.push({ label: pinger.label, tested: false, reason: `artifact download failed — ${e.message}` });
       }
     } else {
       // no data_url — not publicly verifiable
@@ -391,6 +400,7 @@ function pushReport(report) {
 
 // --- main -------------------------------------------------------------------
 
+const startedAt = Date.now();
 const discoverability = checkDiscoverability();
 const completeness = checkCompleteness();
 const pingers = loadPingers();
@@ -430,6 +440,7 @@ const summary = {
 const report = {
   component: CONTRACT.component,
   verified_at: new Date().toISOString(),
+  duration_ms: Date.now() - startedAt,
   pingers_tested: pingerResults.filter((p) => p.tested).map((p) => ({
     label: p.label,
     run_id: p.run_id,
