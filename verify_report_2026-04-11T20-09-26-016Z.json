@@ -1,0 +1,120 @@
+{
+  "component": "remote_mcp_hosting_provider_tools_list_latency_measurement",
+  "verified_at": "2026-04-11T20:09:25.652Z",
+  "pingers_tested": [
+    "github_actions_us_east"
+  ],
+  "pingers_out_of_scope": [
+    {
+      "label": "paris_fr",
+      "reason": "no data_url — results not publicly accessible"
+    }
+  ],
+  "summary": {
+    "pass": 25,
+    "fail": 0,
+    "total": 25
+  },
+  "checks": [
+    {
+      "id": "registry_accessible",
+      "status": "pass"
+    },
+    {
+      "id": "registry_has_component_entry",
+      "status": "pass"
+    },
+    {
+      "id": "registry_has_data_url",
+      "status": "pass"
+    },
+    {
+      "id": "component_contract_accessible",
+      "status": "pass"
+    },
+    {
+      "id": "component_contract_valid",
+      "status": "pass"
+    },
+    {
+      "id": "workflow_present",
+      "status": "pass"
+    },
+    {
+      "id": "verify_script_present",
+      "status": "pass"
+    },
+    {
+      "id": "recent_run_succeeded_github_actions_us_east",
+      "status": "pass"
+    },
+    {
+      "id": "recent_artifact_exists_github_actions_us_east",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_valid_json",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_required_fields",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_benchmark_value",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_all_providers",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_run_metadata",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_result_fields",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_result_ok_field",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_mcpclient_identity",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_mcpclient_ipv4",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_mcpclient_geo",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_mcpclient_latencies",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_mcpserver_identity",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_mcpserver_resolved_ip",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_mcpserver_geo",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_mcpserver_latencies",
+      "status": "pass"
+    },
+    {
+      "id": "artifact_tools_present",
+      "status": "pass"
+    }
+  ]
+}
