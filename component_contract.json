@@ -1,0 +1,10 @@
+{
+  "name": "remote_mcp_hosting_provider_tools_list_latency_measurement",
+  "friction": "Les documentations officielles (Anthropic, OpenAI) recommandent quelques hébergeurs (Cloudflare, Vercel, etc.) avec des arguments marketing, sans données chiffrées objectives. Aucune source indépendante ne fournit de mesures réelles de latence.",
+  "input": "mcp_servers_under_test.json (pipeline registry) — liste d'endpoints de remote MCP servers et configuration de timeout",
+  "output": "Fichiers tools_list_TIMESTAMP.json — un fichier par run, sauvegardés en local results/ + GitHub Actions artifacts (90d retention). Chaque fichier contient : (1) métadonnées du run : benchmark, date, server_label, timeout_ms, jitter_ms ; (2) pour chaque provider : name, url, ok, http_status ; (3) mcpclient : hostname, platform, node_version, ipv4, geo.city, geo.country_code, geo.latitude, geo.longitude ; (4) mcpserver : provider, resolved_ip, geo.city, geo.country_code, geo.latitude, geo.longitude ; (5) timestamps.mcpclient : request_start_ms, request_end_ms (nombres > 0) ; (6) pour résultats ok : timestamps.mcpserver start_ms et end_ms (nombres > 0), tools (tableau non vide)",
+  "data_url": "https://api.github.com/repos/NK5NK5/remote_mcp_hosting_provider_tools_list_latency_measurement/git/trees/data?recursive=1",
+  "when_to_use": "Quand on veut collecter des mesures de latence tools/list sur des remote MCP servers hébergés chez différents providers. Quand on veut enrichir le jeu de données de résultats JSON pour alimenter l'analyse.",
+  "when_not_to_use": "Pour analyser ou visualiser les résultats — utiliser remote_mcp_hosting_provider_tools_list_latency_analysis. Pour des benchmarks tools/call — utiliser remote_mcp_hosting_provider_tools_call_latency_measurement.",
+  "schedule": "toutes les 2h heures paires UTC (GitHub Actions) + toutes les 2h MacBook launchd"
+}

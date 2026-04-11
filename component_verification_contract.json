@@ -1,0 +1,156 @@
+{
+  "component": "remote_mcp_hosting_provider_tools_list_latency_measurement",
+  "verify_script": "node verify.js",
+  "report_output": "data branch — verify_report_TIMESTAMP.json",
+  "result_states": ["pass", "fail"],
+  "levels": [
+    {
+      "level": 1,
+      "name": "discoverability",
+      "description": "Can a cold-start agent find this component and understand what it does?",
+      "checks": [
+        {
+          "id": "registry_accessible",
+          "description": "Public registry responds with HTTP 200",
+          "url": "https://raw.githubusercontent.com/NK5NK5/remote_mcp_hosting_provider_benchmark_pipeline_registry/main/pipeline_components.json"
+        },
+        {
+          "id": "registry_has_component_entry",
+          "description": "Registry contains an entry with name = remote_mcp_hosting_provider_tools_list_latency_measurement"
+        },
+        {
+          "id": "registry_has_data_url",
+          "description": "Component entry has a non-empty data_url field"
+        },
+        {
+          "id": "component_contract_accessible",
+          "description": "component_contract.json is publicly accessible from the component repo",
+          "url": "https://raw.githubusercontent.com/NK5NK5/remote_mcp_hosting_provider_tools_list_latency_measurement/main/component_contract.json"
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "name": "component_completeness",
+      "description": "Is the component fully defined and operational?",
+      "checks": [
+        {
+          "id": "component_contract_valid",
+          "description": "component_contract.json is valid JSON with required fields",
+          "required_fields": ["name", "friction", "input", "output", "data_url", "when_to_use", "when_not_to_use"]
+        },
+        {
+          "id": "workflow_present",
+          "description": "GitHub Actions workflow benchmark.yml exists and has run at least once",
+          "url": "https://api.github.com/repos/NK5NK5/remote_mcp_hosting_provider_tools_list_latency_measurement/actions/workflows"
+        },
+        {
+          "id": "verify_script_present",
+          "description": "verify.js is publicly accessible from the component repo",
+          "url": "https://raw.githubusercontent.com/NK5NK5/remote_mcp_hosting_provider_tools_list_latency_measurement/main/verify.js"
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "name": "output_availability",
+      "description": "Is the component running and producing output?",
+      "max_age_hours": 3,
+      "checks": [
+        {
+          "id": "recent_run_succeeded",
+          "description": "At least one successful GitHub Actions run in the last 3 hours",
+          "url": "https://api.github.com/repos/NK5NK5/remote_mcp_hosting_provider_tools_list_latency_measurement/actions/runs"
+        },
+        {
+          "id": "recent_artifact_exists",
+          "description": "The latest successful run produced at least one artifact"
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "name": "output_integrity_structure",
+      "description": "Is the output structurally valid?",
+      "required_fields": ["benchmark", "date", "server_label", "timeout_ms", "results"],
+      "expected_benchmark_value": "tools/list",
+      "expected_providers": [
+        "cloudflare_workers", "vercel", "netlify", "railway",
+        "supabase_edge_functions", "fermyon", "valtown", "render"
+      ],
+      "checks": [
+        {
+          "id": "artifact_valid_json",
+          "description": "Latest artifact is valid JSON"
+        },
+        {
+          "id": "artifact_required_fields",
+          "description": "File contains benchmark, date, server_label, results"
+        },
+        {
+          "id": "artifact_benchmark_value",
+          "description": "benchmark field equals \"tools/list\""
+        },
+        {
+          "id": "artifact_all_providers",
+          "description": "results contains all 8 expected providers"
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "name": "output_integrity_content",
+      "description": "Are all expected measurement fields present with valid values?",
+      "checks": [
+        {
+          "id": "artifact_run_metadata",
+          "description": "jitter_ms is a number >= 0"
+        },
+        {
+          "id": "artifact_result_fields",
+          "description": "Each result has url (non-empty string) and http_status (integer)"
+        },
+        {
+          "id": "artifact_result_ok_field",
+          "description": "Each result has ok as a boolean"
+        },
+        {
+          "id": "artifact_mcpclient_identity",
+          "description": "Each result has mcpclient with hostname, platform, node_version all non-null"
+        },
+        {
+          "id": "artifact_mcpclient_ipv4",
+          "description": "Each result has mcpclient.ipv4 non-null"
+        },
+        {
+          "id": "artifact_mcpclient_geo",
+          "description": "Each result has mcpclient.geo with city, country_code, latitude, longitude all non-null"
+        },
+        {
+          "id": "artifact_mcpclient_latencies",
+          "description": "Each result has timestamps.mcpclient.request_start_ms and request_end_ms as numbers > 0"
+        },
+        {
+          "id": "artifact_mcpserver_identity",
+          "description": "Each ok result has mcpserver with provider non-null"
+        },
+        {
+          "id": "artifact_mcpserver_resolved_ip",
+          "description": "Each ok result has mcpserver.resolved_ip non-null"
+        },
+        {
+          "id": "artifact_mcpserver_geo",
+          "description": "Each ok result has mcpserver.geo with city, country_code, latitude, longitude all non-null"
+        },
+        {
+          "id": "artifact_mcpserver_latencies",
+          "description": "Each ok result has timestamps.mcpserver.start_ms and end_ms as numbers > 0"
+        },
+        {
+          "id": "artifact_tools_present",
+          "description": "Each ok result has tools as a non-empty array"
+        }
+      ]
+    }
+  ]
+}
