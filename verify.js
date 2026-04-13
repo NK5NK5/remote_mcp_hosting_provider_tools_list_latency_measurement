@@ -19,8 +19,8 @@ const CONTRACT = JSON.parse(
   fs.readFileSync(path.join(__dirname, "component_verification_contract.json"), "utf8")
 );
 
-const REPO = "NK5NK5/remote_mcp_hosting_provider_tools_list_latency_measurement";
-const REGISTRY_URL = "https://raw.githubusercontent.com/NK5NK5/remote_mcp_hosting_provider_benchmark_pipeline_registry/main/pipeline_components.json";
+const REPO = "mcp-server-hosting-providers-benchmark/tools_list_latency_measurer";
+const REGISTRY_URL = "https://raw.githubusercontent.com/mcp-server-hosting-providers-benchmark/pipeline_components_registry/main/pipeline_components.json";
 const GH_TOKEN = process.env.GH_TOKEN || "";
 
 // --local-file <path> : skip level 3, use local file for levels 4 & 5, no push
