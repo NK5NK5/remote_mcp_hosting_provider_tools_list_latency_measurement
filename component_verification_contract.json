@@ -1,5 +1,5 @@
 {
-  "component": "remote_mcp_hosting_provider_tools_list_latency_measurement",
+  "component": "tools_list_latency_measurer",
   "verify_script": "node verify.js",
   "report_output": "data branch — verify_report_TIMESTAMP.json",
   "result_states": ["pass", "fail"],
