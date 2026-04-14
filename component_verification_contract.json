@@ -1,6 +1,7 @@
 {
   "component": "tools_list_latency_measurer",
   "verify_script": "node verify.js",
+  "verify_reports_url": "https://api.github.com/repos/mcp-server-hosting-providers-benchmark/tools_list_latency_measurer/git/trees/data?recursive=1",
   "report_output": "data branch — verify_report_TIMESTAMP.json",
   "result_states": ["pass", "fail"],
   "audit_scope": "GitHub Actions pinger only — MacBook pinger is out of scope (local filesystem, not reachable from GitHub Actions). MacBook pinger coverage is delegated to the collector verifier which consolidates both sources.",
