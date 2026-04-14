@@ -19,13 +19,13 @@
   <key>ProgramArguments</key>
   <array>
     <string>/Users/nico/.nvm/versions/node/v24.14.0/bin/node</string>
-    <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/tools_list_measurement.js</string>
+    <string>/Users/nico/Projects/remote_mcp_server_hosting_provider_benchmarker/tools_list_latency_measurer/tools_list_measurement.js</string>
     <string>--jitter</string>
     <string>300</string>
   </array>
 
   <key>WorkingDirectory</key>
-  <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement</string>
+  <string>/Users/nico/Projects/remote_mcp_server_hosting_provider_benchmarker/tools_list_latency_measurer</string>
 
   <!-- Toutes les 2h aux heures paires UTC -->
   <key>StartCalendarInterval</key>
@@ -45,10 +45,10 @@
   </array>
 
   <key>StandardOutPath</key>
-  <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/logs/tools_list.log</string>
+  <string>/Users/nico/Projects/remote_mcp_server_hosting_provider_benchmarker/tools_list_latency_measurer/logs/tools_list.log</string>
 
   <key>StandardErrorPath</key>
-  <string>/Users/nico/Projects/remote_mcp_hosting_provider_tools_list_latency_measurement/logs/tools_list.log</string>
+  <string>/Users/nico/Projects/remote_mcp_server_hosting_provider_benchmarker/tools_list_latency_measurer/logs/tools_list.log</string>
 
   <!-- Relance si crash -->
   <key>KeepAlive</key>
