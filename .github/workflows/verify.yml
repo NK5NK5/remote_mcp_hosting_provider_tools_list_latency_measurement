@@ -1,8 +1,6 @@
 name: verify
 
 on:
-  schedule:
-    - cron: "0 3 * * *"   # une fois par jour à 3h UTC
   workflow_dispatch:
 
 permissions:
