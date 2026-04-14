@@ -39,7 +39,7 @@
         {
           "id": "component_contract_valid",
           "description": "component_contract.json is valid JSON with required fields",
-          "required_fields": ["name", "friction", "input", "output", "data_url", "when_to_use", "when_not_to_use"]
+          "required_fields": ["name", "friction", "input", "output", "output_url", "schedule", "when_to_use", "when_not_to_use"]
         },
         {
           "id": "workflow_present",

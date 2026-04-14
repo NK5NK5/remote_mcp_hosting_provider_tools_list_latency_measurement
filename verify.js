@@ -84,14 +84,14 @@ function checkDiscoverability() {
     return results;
   }
 
-  entry = registry.find((c) => c.name === CONTRACT.component);
+  entry = registry.find((c) => c.component_name === CONTRACT.component);
   results.push(entry
     ? pass("registry_has_component_entry")
     : fail("registry_has_component_entry", "no entry found with matching name"));
 
-  results.push(entry?.data_url
+  results.push(entry?.component_output_url
     ? pass("registry_has_data_url")
-    : fail("registry_has_data_url", "data_url field missing or empty"));
+    : fail("registry_has_data_url", "component_output_url field missing or empty"));
 
   results.push(httpOk(CONTRACT.levels[0].checks[3].url)
     ? pass("component_contract_accessible")
