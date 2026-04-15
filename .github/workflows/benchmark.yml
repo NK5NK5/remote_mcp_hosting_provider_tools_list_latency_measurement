@@ -5,6 +5,9 @@ on:
     - cron: "0 */2 * * *"   # toutes les 2h
   workflow_dispatch:          # déclenchement manuel
 
+permissions:
+  contents: write
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -15,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -26,9 +31,26 @@ jobs:
           node tools_list_measurement.js
           echo "NEW_FILE=$(ls -t results/ | head -1)" >> $GITHUB_ENV
 
-      - name: Upload results
-        uses: actions/upload-artifact@v4
-        with:
-          name: results-${{ github.run_id }}
-          path: results/${{ env.NEW_FILE }}
-          retention-days: 90
+      - name: Push result to data branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create data branch if it doesn't exist
+          if git ls-remote --exit-code origin data > /dev/null 2>&1; then
+            git worktree add .data_branch origin/data -b data_push 2>/dev/null || \
+            git worktree add .data_branch data
+          else
+            git worktree add --orphan -b data .data_branch
+          fi
+
+          cp results/${{ env.NEW_FILE }} .data_branch/
+          git -C .data_branch add "*.json"
+          git -C .data_branch commit -m "result: ${{ env.NEW_FILE }}"
+
+          for attempt in 1 2 3; do
+            git -C .data_branch push origin HEAD:data && break
+            git -C .data_branch pull --rebase origin data
+          done
+
+          git worktree remove .data_branch
