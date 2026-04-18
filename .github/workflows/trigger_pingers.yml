@@ -1,0 +1,80 @@
+name: trigger-pinger-relay
+
+# Fires every 30 minutes and triggers one Cloud Run Job pinger in sequence.
+# 12 pingers × 30min = 6h cycle. Each pinger runs independently every 6h.
+#
+# Relay order (UTC):
+#   :00 sydney_au  :30 virginia_us  1:00 oregon_us    1:30 paris_fr
+#   2:00 warsaw_pl  2:30 hong_kong  3:00 tokyo_jp     3:30 singapore_sg
+#   4:00 mumbai_in  4:30 sao_paulo  5:00 tel_aviv_il  5:30 johannesburg_za
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: "Slot override (0–11). Leave empty for auto."
+        required: false
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Select pinger
+        id: pinger
+        run: |
+          declare -a LABELS=(
+            sydney_au virginia_us oregon_us paris_fr
+            warsaw_pl hong_kong_hk tokyo_jp singapore_sg
+            mumbai_in sao_paulo_br tel_aviv_il johannesburg_za
+          )
+          declare -a REGIONS=(
+            australia-southeast1 us-east1 us-west1 europe-west9
+            europe-central2 asia-east2 asia-northeast1 asia-southeast1
+            asia-south1 southamerica-east1 me-west1 africa-south1
+          )
+          declare -a PROJECTS=(
+            tools-list-latency-pingers tools-list-latency-pingers tools-list-latency-pingers tools-list-latency-pingers
+            tools-list-latency-pingers tools-list-latency-pingers-3 tools-list-latency-pingers-2 tools-list-latency-pingers-2
+            tools-list-latency-pingers-2 tools-list-latency-pingers-2 tools-list-latency-pingers-2 tools-list-latency-pingers-2
+          )
+
+          if [ -n "${{ inputs.slot }}" ]; then
+            SLOT=${{ inputs.slot }}
+          else
+            HOUR=$(date -u +%-H)
+            MINUTE=$(date -u +%-M)
+            SLOT=$(( (HOUR * 2 + MINUTE / 30) % 12 ))
+          fi
+
+          LABEL="${LABELS[$SLOT]}"
+          REGION="${REGIONS[$SLOT]}"
+          PROJECT="${PROJECTS[$SLOT]}"
+          JOB="mcp-pinger-${LABEL//_/-}"
+
+          echo "slot=$SLOT"     >> $GITHUB_OUTPUT
+          echo "label=$LABEL"   >> $GITHUB_OUTPUT
+          echo "region=$REGION" >> $GITHUB_OUTPUT
+          echo "project=$PROJECT" >> $GITHUB_OUTPUT
+          echo "job=$JOB"       >> $GITHUB_OUTPUT
+
+          echo "Slot $SLOT → $LABEL ($REGION, $PROJECT)"
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Execute pinger
+        run: |
+          gcloud run jobs execute ${{ steps.pinger.outputs.job }} \
+            --region=${{ steps.pinger.outputs.region }} \
+            --project=${{ steps.pinger.outputs.project }} \
+            --async \
+            --quiet
+          echo "✓ Triggered ${{ steps.pinger.outputs.label }}"

@@ -1,9 +1,7 @@
 name: tools_list_benchmark
 
 on:
-  schedule:
-    - cron: "0 */2 * * *"   # toutes les 2h
-  workflow_dispatch:          # déclenchement manuel
+  workflow_dispatch:          # déclenchement manuel uniquement — remplacé par trigger_pingers.yml
 
 permissions:
   contents: write
