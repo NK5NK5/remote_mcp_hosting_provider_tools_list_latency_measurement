@@ -1,21 +1,18 @@
 #!/usr/bin/env node
 /**
- * gcr_pinger — Cloud Run Job version of tools_list_measurement.js
+ * gcr_pinger — Cloud Run Job qui mesure la latence tools/list de chaque MCP server.
  *
- * Différences vs le script MacBook :
- * - server_label lu depuis PINGER_LABEL (env var injecté par le job GCR)
- * - pinger_source_url construit depuis CLOUD_RUN_JOB + GCR_REGION (env vars GCR)
- * - résultat écrit dans Google Cloud Storage via l'API REST (token metadata server)
- * - jitter désactivé (Cloud Scheduler distribue déjà les exécutions dans le temps)
+ * Déclenché toutes les 30 minutes en relay par trigger_pingers.yml (GitHub Actions).
+ * Écrit le résultat dans GCS : gs://<GCS_BUCKET>/<PINGER_LABEL>/tools_list_<timestamp>.json
  *
  * Env vars requis :
  *   GCS_BUCKET      — nom du bucket GCS cible, ex. "mcp-benchmark-results"
- *   PINGER_LABEL    — identifiant humain de la région, ex. "paris_fr"
+ *   PINGER_LABEL    — identifiant de la région, ex. "paris_fr"
  *   GCR_REGION      — région GCR, ex. "europe-west9"
  *
  * Env vars auto-injectés par Cloud Run Jobs :
- *   CLOUD_RUN_JOB   — nom du job, ex. "mcp-pinger-paris"
- *   CLOUD_RUN_EXECUTION — identifiant d'exécution
+ *   CLOUD_RUN_JOB        — nom du job, ex. "mcp-pinger-paris-fr"
+ *   CLOUD_RUN_EXECUTION  — identifiant d'exécution
  */
 
 import { hostname, platform } from "os";
@@ -30,7 +27,7 @@ const GCR_REGION = process.env.GCR_REGION ?? null;
 const CLOUD_RUN_JOB = process.env.CLOUD_RUN_JOB ?? null;
 
 const timeout_ms = parseInt(process.env.TIMEOUT_MS ?? "15000", 10);
-const jitter_ms = 0; // pas de jitter en GCR — Cloud Scheduler gère le timing
+const jitter_ms = 0; // pas de jitter — GitHub Actions relay gère le timing
 
 if (!DRY_RUN && !GCS_BUCKET) {
   console.error("ERREUR : GCS_BUCKET non défini.");
