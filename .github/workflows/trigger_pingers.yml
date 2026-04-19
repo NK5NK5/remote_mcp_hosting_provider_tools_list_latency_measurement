@@ -72,9 +72,12 @@ jobs:
 
       - name: Execute pinger
         run: |
-          gcloud run jobs execute ${{ steps.pinger.outputs.job }} \
+          if gcloud run jobs execute ${{ steps.pinger.outputs.job }} \
             --region=${{ steps.pinger.outputs.region }} \
             --project=${{ steps.pinger.outputs.project }} \
             --async \
-            --quiet
-          echo "✓ Triggered ${{ steps.pinger.outputs.label }}"
+            --quiet 2>&1; then
+            echo "✓ Triggered ${{ steps.pinger.outputs.label }}"
+          else
+            echo "⚠ Pinger ${{ steps.pinger.outputs.label }} failed to start — skipping slot" >&2
+          fi
