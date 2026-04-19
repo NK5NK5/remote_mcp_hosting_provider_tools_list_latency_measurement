@@ -1,14 +1,14 @@
 {
-  "sydney_au":       "gcr://australia-southeast1/mcp-pinger-sydney-au",
-  "virginia_us":     "gcr://us-east1/mcp-pinger-virginia-us",
-  "oregon_us":       "gcr://us-west1/mcp-pinger-oregon-us",
-  "paris_fr":        "gcr://europe-west9/mcp-pinger-paris-fr",
-  "warsaw_pl":       "gcr://europe-central2/mcp-pinger-warsaw-pl",
-  "hong_kong_hk":    "gcr://asia-east2/mcp-pinger-hong-kong-hk",
-  "tokyo_jp":        "gcr://asia-northeast1/mcp-pinger-tokyo-jp",
-  "singapore_sg":    "gcr://asia-southeast1/mcp-pinger-singapore-sg",
-  "mumbai_in":       "gcr://asia-south1/mcp-pinger-mumbai-in",
-  "sao_paulo_br":    "gcr://southamerica-east1/mcp-pinger-sao-paulo-br",
-  "tel_aviv_il":     "gcr://me-west1/mcp-pinger-tel-aviv-il",
-  "johannesburg_za": "gcr://africa-south1/mcp-pinger-johannesburg-za"
+  "sydney_au":       "googlecloudrun://tools-list-latency-pingers/australia-southeast1/mcp-pinger-sydney-au",
+  "virginia_us":     "googlecloudrun://tools-list-latency-pingers/us-east1/mcp-pinger-virginia-us",
+  "oregon_us":       "googlecloudrun://tools-list-latency-pingers/us-west1/mcp-pinger-oregon-us",
+  "paris_fr":        "googlecloudrun://tools-list-latency-pingers/europe-west9/mcp-pinger-paris-fr",
+  "warsaw_pl":       "googlecloudrun://tools-list-latency-pingers/europe-central2/mcp-pinger-warsaw-pl",
+  "hong_kong_hk":    "googlecloudrun://tools-list-latency-pingers-3/asia-east2/mcp-pinger-hong-kong-hk",
+  "tokyo_jp":        "googlecloudrun://tools-list-latency-pingers-2/asia-northeast1/mcp-pinger-tokyo-jp",
+  "singapore_sg":    "googlecloudrun://tools-list-latency-pingers-2/asia-southeast1/mcp-pinger-singapore-sg",
+  "mumbai_in":       "googlecloudrun://tools-list-latency-pingers-2/asia-south1/mcp-pinger-mumbai-in",
+  "sao_paulo_br":    "googlecloudrun://tools-list-latency-pingers-2/southamerica-east1/mcp-pinger-sao-paulo-br",
+  "tel_aviv_il":     "googlecloudrun://tools-list-latency-pingers-2/me-west1/mcp-pinger-tel-aviv-il",
+  "johannesburg_za": "googlecloudrun://tools-list-latency-pingers-2/africa-south1/mcp-pinger-johannesburg-za"
 }
