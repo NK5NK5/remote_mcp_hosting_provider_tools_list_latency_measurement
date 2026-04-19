@@ -1,14 +1,14 @@
 {
-  "sydney_au":       { "region": "australia-southeast1",  "project": "tools-list-latency-pingers",   "continent": "Oceania",       "city": "Sydney",        "country_code": "AU" },
-  "virginia_us":     { "region": "us-east1",              "project": "tools-list-latency-pingers",   "continent": "North America", "city": "Ashburn",       "country_code": "US" },
-  "oregon_us":       { "region": "us-west1",              "project": "tools-list-latency-pingers",   "continent": "North America", "city": "The Dalles",    "country_code": "US" },
-  "paris_fr":        { "region": "europe-west9",          "project": "tools-list-latency-pingers",   "continent": "Europe",        "city": "Paris",         "country_code": "FR" },
-  "warsaw_pl":       { "region": "europe-central2",       "project": "tools-list-latency-pingers",   "continent": "Europe",        "city": "Warsaw",        "country_code": "PL" },
-  "hong_kong_hk":    { "region": "asia-east2",            "project": "tools-list-latency-pingers-3", "continent": "Asia",          "city": "Hong Kong",     "country_code": "HK" },
-  "tokyo_jp":        { "region": "asia-northeast1",       "project": "tools-list-latency-pingers-2", "continent": "Asia",          "city": "Tokyo",         "country_code": "JP" },
-  "singapore_sg":    { "region": "asia-southeast1",       "project": "tools-list-latency-pingers-2", "continent": "Asia",          "city": "Singapore",     "country_code": "SG" },
-  "mumbai_in":       { "region": "asia-south1",           "project": "tools-list-latency-pingers-2", "continent": "Asia",          "city": "Mumbai",        "country_code": "IN" },
-  "sao_paulo_br":    { "region": "southamerica-east1",    "project": "tools-list-latency-pingers-2", "continent": "South America", "city": "São Paulo",     "country_code": "BR" },
-  "tel_aviv_il":     { "region": "me-west1",              "project": "tools-list-latency-pingers-2", "continent": "Middle East",   "city": "Tel Aviv",      "country_code": "IL" },
-  "johannesburg_za": { "region": "africa-south1",         "project": "tools-list-latency-pingers-2", "continent": "Africa",        "city": "Johannesburg",  "country_code": "ZA" }
+  "sydney_au":       { "url": "gcr://australia-southeast1/mcp-pinger-sydney-au",       "region": "australia-southeast1",  "project": "tools-list-latency-pingers",   "continent": "Oceania",       "city": "Sydney",        "country_code": "AU" },
+  "virginia_us":     { "url": "gcr://us-east1/mcp-pinger-virginia-us",                 "region": "us-east1",              "project": "tools-list-latency-pingers",   "continent": "North America", "city": "Ashburn",       "country_code": "US" },
+  "oregon_us":       { "url": "gcr://us-west1/mcp-pinger-oregon-us",                   "region": "us-west1",              "project": "tools-list-latency-pingers",   "continent": "North America", "city": "The Dalles",    "country_code": "US" },
+  "paris_fr":        { "url": "gcr://europe-west9/mcp-pinger-paris-fr",                "region": "europe-west9",          "project": "tools-list-latency-pingers",   "continent": "Europe",        "city": "Paris",         "country_code": "FR" },
+  "warsaw_pl":       { "url": "gcr://europe-central2/mcp-pinger-warsaw-pl",            "region": "europe-central2",       "project": "tools-list-latency-pingers",   "continent": "Europe",        "city": "Warsaw",        "country_code": "PL" },
+  "hong_kong_hk":    { "url": "gcr://asia-east2/mcp-pinger-hong-kong-hk",              "region": "asia-east2",            "project": "tools-list-latency-pingers-3", "continent": "Asia",          "city": "Hong Kong",     "country_code": "HK" },
+  "tokyo_jp":        { "url": "gcr://asia-northeast1/mcp-pinger-tokyo-jp",             "region": "asia-northeast1",       "project": "tools-list-latency-pingers-2", "continent": "Asia",          "city": "Tokyo",         "country_code": "JP" },
+  "singapore_sg":    { "url": "gcr://asia-southeast1/mcp-pinger-singapore-sg",         "region": "asia-southeast1",       "project": "tools-list-latency-pingers-2", "continent": "Asia",          "city": "Singapore",     "country_code": "SG" },
+  "mumbai_in":       { "url": "gcr://asia-south1/mcp-pinger-mumbai-in",                "region": "asia-south1",           "project": "tools-list-latency-pingers-2", "continent": "Asia",          "city": "Mumbai",        "country_code": "IN" },
+  "sao_paulo_br":    { "url": "gcr://southamerica-east1/mcp-pinger-sao-paulo-br",      "region": "southamerica-east1",    "project": "tools-list-latency-pingers-2", "continent": "South America", "city": "São Paulo",     "country_code": "BR" },
+  "tel_aviv_il":     { "url": "gcr://me-west1/mcp-pinger-tel-aviv-il",                 "region": "me-west1",              "project": "tools-list-latency-pingers-2", "continent": "Middle East",   "city": "Tel Aviv",      "country_code": "IL" },
+  "johannesburg_za": { "url": "gcr://africa-south1/mcp-pinger-johannesburg-za",        "region": "africa-south1",         "project": "tools-list-latency-pingers-2", "continent": "Africa",        "city": "Johannesburg",  "country_code": "ZA" }
 }
