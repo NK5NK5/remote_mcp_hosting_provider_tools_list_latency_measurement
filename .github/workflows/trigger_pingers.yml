@@ -9,8 +9,6 @@ name: trigger-pinger-relay
 #   4:00 mumbai_in  4:30 sao_paulo  5:00 tel_aviv_il  5:30 johannesburg_za
 
 on:
-  schedule:
-    - cron: "*/30 * * * *"
   workflow_dispatch:
     inputs:
       slot:
