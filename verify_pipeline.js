@@ -25,6 +25,8 @@ const flag = (name) => { const i = args.indexOf(name); return i !== -1 ? args[i 
 const BUCKET = "mcp-benchmark-results";
 const PUBLISHER_JSON_URL =
   "https://mcp-server-hosting-providers-benchmark.github.io/tools_list_latency_publisher/llms-full.json";
+const ENDPOINTS_URL =
+  "https://raw.githubusercontent.com/mcp-server-hosting-providers-benchmark/mcp_server_per_hosting_provider/main/mcp_servers_under_test.json";
 const SCHEDULER_PROJECT = "tools-list-latency-pingers";
 const SCHEDULER_LOCATION = "us-central1";
 const SCHEDULER_JOB_ID = "github-relay";
@@ -85,6 +87,99 @@ async function list_gcs_files() {
       ts: new Date(item.timeCreated),
     }))
     .filter(f => SLOT_LABELS.includes(f.label));
+}
+
+async function fetch_expected_servers() {
+  const res = await fetch(ENDPOINTS_URL, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Impossible de récupérer mcp_servers_under_test.json (${res.status})`);
+  const data = await res.json();
+  return Object.entries(data)
+    .filter(([name]) => !name.startsWith("_"))
+    .map(([name, url]) => ({ name, url }));
+}
+
+function gcs_object_url(name) {
+  const encoded_name = name.split("/").map(encodeURIComponent).join("/");
+  return `https://storage.googleapis.com/${BUCKET}/${encoded_name}`;
+}
+
+async function fetch_measurement_file(file) {
+  const res = await fetch(gcs_object_url(file.name), { cache: "no-store" });
+  if (!res.ok) throw new Error(`GCS object failed (${res.status})`);
+  return res.json();
+}
+
+function failure_reason(result) {
+  if (result.error) return result.error;
+  if (result.parse_error) return `parse_error: ${result.parse_error}`;
+  if (result.http_status !== null && result.http_status !== undefined) return `http ${result.http_status}`;
+  return "ok=false";
+}
+
+function summarize_measurement(data, expected_servers) {
+  const results = Array.isArray(data.results) ? data.results : [];
+  const by_name = new Map(results.map(r => [r.name, r]));
+  const expected_names = new Set(expected_servers.map(s => s.name));
+  const missing = [];
+  const failed = [];
+  const url_mismatch = [];
+
+  for (const server of expected_servers) {
+    const result = by_name.get(server.name);
+    if (!result) {
+      missing.push(server.name);
+      continue;
+    }
+    if (result.url !== server.url) {
+      url_mismatch.push({ name: server.name, expected: server.url, measured: result.url });
+    }
+    if (result.ok !== true) {
+      failed.push({ name: server.name, reason: failure_reason(result) });
+    }
+  }
+
+  const unexpected = results
+    .filter(r => !expected_names.has(r.name))
+    .map(r => r.name);
+
+  return {
+    total_expected: expected_servers.length,
+    total_results: results.length,
+    ok_count: expected_servers.length - missing.length - failed.length,
+    missing,
+    failed,
+    unexpected,
+    url_mismatch,
+  };
+}
+
+async function summarize_measurement_file(file, expected_servers) {
+  try {
+    const data = await fetch_measurement_file(file);
+    return { file, summary: summarize_measurement(data, expected_servers) };
+  } catch (e) {
+    return { file, error: e.message ?? String(e) };
+  }
+}
+
+function host_summary_label(measurement) {
+  if (!measurement) return "—";
+  if (measurement.error) return "lecture impossible";
+  const s = measurement.summary;
+  return `${s.ok_count}/${s.total_expected} ok`;
+}
+
+function host_summary_ok(measurement) {
+  if (!measurement || measurement.error) return false;
+  const s = measurement.summary;
+  return (
+    s.total_results === s.total_expected &&
+    s.ok_count === s.total_expected &&
+    s.missing.length === 0 &&
+    s.failed.length === 0 &&
+    s.unexpected.length === 0 &&
+    s.url_mismatch.length === 0
+  );
 }
 
 // --- Runs agrégés côté publisher ---
@@ -181,6 +276,7 @@ const [gcs_files, publisher] = await Promise.all([
   list_gcs_files(),
   fetch_publisher_runs(),
 ]);
+const expected_servers = await fetch_expected_servers();
 
 const gcs_in_window = gcs_files
   .filter(f => f.ts >= since && f.ts <= now)
@@ -192,13 +288,10 @@ console.log(`\nFenêtre Paris : ${paris_full(since)} → ${paris_full(now)}`);
 console.log(`(UTC : ${since.toISOString()} → ${now.toISOString()})`);
 console.log(`Tolérance d'appariement slot/fichier : ±${tolerance_ms / 1000}s\n`);
 
-console.log("═══ Test 1 : Les pingers prévus par le schedule ont-ils tous déposé leur fichier dans GCS ? ═══\n");
-console.log("Slot | Pinger attendu   | Heure slot (Paris)  | Fichier(s) GCS (Paris)  | Statut");
-console.log("-----|------------------|---------------------|-------------------------|--------");
-
 let ok = 0, missing = 0, dup = 0;
 const used = new Set();
 const missing_slots = [];
+const slot_rows = [];
 
 for (const s of slots) {
   const matches = gcs_in_window.filter(f =>
@@ -213,13 +306,30 @@ for (const s of slots) {
   else if (matches.length === 1) ok++;
   else dup++;
   if (matches.length === 0) missing_slots.push(s);
+  slot_rows.push({ slot: s, matches, status });
+}
 
-  const time_str = paris_day(s.time);
-  const files_str = matches.length
-    ? matches.map(m => paris_hms(m.ts)).join(", ")
+const matched_files = slot_rows.flatMap(r => r.matches);
+const unique_matched_files = [...new Map(matched_files.map(f => [f.name, f])).values()];
+const measurement_summaries = new Map(
+  (await Promise.all(unique_matched_files.map(f => summarize_measurement_file(f, expected_servers))))
+    .map(result => [result.file.name, result])
+);
+
+console.log("═══ Test 1 : Les pingers prévus par le schedule ont-ils tous déposé leur fichier dans GCS ? ═══\n");
+console.log("Slot | Pinger attendu   | Heure slot (Paris)  | Fichier(s) GCS (Paris)  | Hébergeurs testés | Statut");
+console.log("-----|------------------|---------------------|-------------------------|-------------------|--------");
+
+for (const row of slot_rows) {
+  const time_str = paris_day(row.slot.time);
+  const files_str = row.matches.length
+    ? row.matches.map(m => paris_hms(m.ts)).join(", ")
+    : "—";
+  const hosts_str = row.matches.length
+    ? row.matches.map(m => host_summary_label(measurement_summaries.get(m.name))).join(", ")
     : "—";
   console.log(
-    `${String(s.slot).padStart(4)} | ${s.label.padEnd(16)} | ${time_str.padEnd(19)} | ${files_str.padEnd(23)} | ${status}`
+    `${String(row.slot.slot).padStart(4)} | ${row.slot.label.padEnd(16)} | ${time_str.padEnd(19)} | ${files_str.padEnd(23)} | ${hosts_str.padEnd(17)} | ${row.status}`
   );
 }
 
@@ -335,6 +445,63 @@ if (publisher.error) {
   test2_ok = only_gcs === 0 && only_pub === 0;
 }
 
+// --- Test 3 : résultats des serveurs MCP dans chaque fichier de mesure ---
+console.log(`\n═══ Test 3 : Les serveurs MCP hébergés à mesurer ont-ils répondu aux pingers exécutés ? ═══\n`);
+console.log(`Source des serveurs attendus : ${ENDPOINTS_URL}`);
+console.log(`Serveurs MCP attendus : ${expected_servers.length}\n`);
+console.log("Pinger            | Heure run (Paris)    | Serveurs testés | Réponses OK | Erreurs | Statut");
+console.log("------------------|----------------------|-----------------|-------------|---------|--------");
+
+let test3_ok = true;
+const test3_details = [];
+const rows_with_one_file = slot_rows
+  .filter(r => r.matches.length === 1)
+  .map(r => ({ slot: r.slot, file: r.matches[0], measurement: measurement_summaries.get(r.matches[0].name) }));
+
+for (const row of rows_with_one_file) {
+  const m = row.measurement;
+  let tested = "lecture impossible";
+  let ok_hosts = "0";
+  let error_count = 1;
+  let status = "✗ fichier illisible";
+
+  if (m?.error) {
+    test3_details.push({ row, lines: [`fichier GCS illisible : ${m.error}`] });
+  } else if (m?.summary) {
+    const s = m.summary;
+    tested = `${s.total_results}/${s.total_expected}`;
+    ok_hosts = String(s.ok_count);
+    error_count = s.missing.length + s.failed.length + s.unexpected.length + s.url_mismatch.length;
+    status = host_summary_ok(m) ? "✓ ok" : "✗ anomalie";
+
+    const lines = [];
+    if (s.total_results !== s.total_expected) lines.push(`nombre de résultats : ${s.total_results}/${s.total_expected}`);
+    for (const name of s.missing) lines.push(`${name} : résultat absent du fichier de mesure`);
+    for (const failure of s.failed) lines.push(`${failure.name} : ${failure.reason}`);
+    for (const name of s.unexpected) lines.push(`${name} : serveur non attendu dans le fichier de mesure`);
+    for (const mismatch of s.url_mismatch) lines.push(`${mismatch.name} : URL mesurée différente de l'URL attendue`);
+    if (lines.length) test3_details.push({ row, lines });
+  }
+
+  if (status !== "✓ ok") test3_ok = false;
+  console.log(
+    `${row.slot.label.padEnd(17)} | ${paris_full(row.file.ts).padEnd(20)} | ${tested.padEnd(15)} | ${ok_hosts.padEnd(11)} | ${String(error_count).padEnd(7)} | ${status}`
+  );
+}
+if (rows_with_one_file.length === 0) console.log("  (aucun fichier de mesure apparié à un slot attendu)");
+
+if (test3_details.length) {
+  console.log("\nDétail des anomalies de réponse des serveurs MCP :");
+  for (const detail of test3_details) {
+    console.log(`  ${detail.row.slot.label} ${paris_full(detail.row.file.ts)} Paris (${detail.row.file.name})`);
+    for (const line of detail.lines) console.log(`    - ${line}`);
+  }
+}
+
+const test3_sync = rows_with_one_file.filter(r => host_summary_ok(r.measurement)).length;
+const test3_bad = rows_with_one_file.length - test3_sync;
+console.log(`\nBilan serveurs MCP : ${test3_sync} fichiers complets · ${test3_bad} fichiers avec anomalie`);
+
 // Exit code utile pour CI : 0 si tout vert, 1 sinon
 const test1_ok = missing === 0 && dup === 0 && unexpected.length === 0;
-process.exit(test1_ok && test2_ok ? 0 : 1);
+process.exit(test1_ok && test2_ok && test3_ok ? 0 : 1);
